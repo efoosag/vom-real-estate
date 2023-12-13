@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom'
 
 export default function Header() {
   return (
-    <header>
-      <div className='flex justify-between items-center mx-auto p-5 bg-slate-200 shadow-lg'>
+    <header className='bg-slate-200 shadow-lg'>
+      <div className='flex justify-between items-center mx-auto p-3  max-w-6xl bg-slate-200'>
         <h1 className='font-bold flex flex-wrap items-center'>
           <Link to='/'>
             <span className='text-slate-500 text-lg sm:text-xl'>VOM</span>
