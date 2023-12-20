@@ -6,10 +6,7 @@ import bcryptjs from "bcryptjs";
 export const addNewUser = async(user) => {
   const { username, email, password } = user;
   const hashedPassword = bcryptjs.hashSync(password, 10);
-  try {  
-    const newUser = new User({username, email, password: hashedPassword})
-    return await newUser.save()
-  }catch(err){
-    return err.message
-  }
+  const formatedEmail = email.split('@')[0].toLowerCase();  
+  const newUser = new User({username, email: formatedEmail, password: hashedPassword})
+    return await newUser.save()  
 }
