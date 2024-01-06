@@ -10,3 +10,8 @@ export const httpSignUp = async (user) => {
   const res = await publicRequest.post("/auth/signup", user)  
   return res.data   
 }
+
+export const httpSignIn = async (user) => {
+  const res = await publicRequest.post("/auth/signin", user)  
+  return res.data   
+}
