@@ -6,6 +6,11 @@ export const publicRequest = axios.create({
   baseURL: BASE_URL,
 })
 
+export const authWithGoogle = async (user) => {
+  const res = await publicRequest.post("auth/google", user)  
+  return res.data   
+}
+
 export const httpSignUp = async (user) => {
   const res = await publicRequest.post("/auth/signup", user)  
   return res.data   

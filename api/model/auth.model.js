@@ -31,3 +31,45 @@ export const signInUser = async(user) => {
     
   return {...userOtherDetails, accesstoken}
 }
+
+export const signInGoogleUser = async(user) => {     
+  const validateUserEmail = await User.findOne({email: user.email})
+  if(validateUserEmail) {
+  const accesstoken = jwt.sign(
+    {
+      id: validateUserEmail._id,        
+    },
+    process.env.JWT_SEC_KEY,
+    {
+      expiresIn: "3d"
+    }
+  )
+  const { password, ...userOtherDetails} = validateUserEmail._doc //return details without password
+    
+  return {...userOtherDetails, accesstoken}
+  } else {
+    const { name, email, photo } = user;
+    const generatedPassword = Math.random().toString(36).slice(-8)
+    const formatedUsername = name.split(" ").join().toLowerCase()
+    const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
+    const formatedEmail = user.email.replace(email.split('@')[0], email.split('@')[0].toLowerCase());  
+    const newUser = new User({
+      username: formatedUsername, 
+      email: formatedEmail, 
+      password: hashedPassword,
+      avatar: photo,
+    })
+    await newUser.save()
+    const accesstoken = jwt.sign(
+      {
+        id: newUser._id,        
+      },
+      process.env.JWT_SEC_KEY,
+      {
+        expiresIn: "3d"
+      }
+    )
+    const { password, ...userOtherDetails} = newUser._doc //return details without password
+    return {...userOtherDetails, accesstoken}  
+  }
+}

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import {Link, useNavigate} from 'react-router-dom'
 import { httpSignUp } from '../httpRequest'
+import Oauth from '../components/Oauth'
 
 export default function SignUp() {
   const navigate = useNavigate()
@@ -41,11 +42,12 @@ export default function SignUp() {
         <input type='text' placeholder='username' required className='p-3 border rounded-lg' id='username' onChange={handleChange}/>
         <input type='email' placeholder='email' required className='p-3 border rounded-lg' id='email' onChange={handleChange}/>
         <input type='password' placeholder='password' required className='p-3 border rounded-lg' id='password' onChange={handleChange}/>
-        <button disabled={loading} className='bg-slate-900 text-white p-3 rounded-lg hover:opacity-80' onClick={handleSubmit}>{loading ? 'Loading...' : 'Sign in'}</button>
+        <button disabled={loading} className='bg-slate-900 text-white p-3 rounded-lg hover:opacity-80' onClick={handleSubmit}>{loading ? 'Loading...' : 'Sign up'}</button>
+        <Oauth />
       </form>
       <div className='flex gap-2 my-5'>
         <p>Already have an account?</p>
-        <Link to={'/sign_in'}><span className='text-blue-800'>Sign up</span></Link>
+        <Link to={'/sign_in'}><span className='text-blue-800'>Sign in</span></Link>
       </div>
       {error && <p className='text-red-600 mt-1'>{error}</p>}
     </div>

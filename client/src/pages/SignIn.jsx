@@ -3,6 +3,7 @@ import {Link, useNavigate} from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { signInStart, signInSuccess, signInFailure } from '../redux/userSlikce'
 import { httpSignIn } from '../httpRequest'
+import Oauth from '../components/Oauth'
 
 export default function SignIn() {
   const navigate = useNavigate()
@@ -35,6 +36,7 @@ export default function SignIn() {
         <input type='email' placeholder='email' required className='p-3 border rounded-lg' id='email' onChange={handleChange}/>
         <input type='password' placeholder='password' required className='p-3 border rounded-lg' id='password' onChange={handleChange}/>
         <button disabled={loading} className='bg-slate-900 text-white p-3 rounded-lg hover:opacity-80' onClick={handleSubmit}>{loading ? 'Loading...' : 'Sign in'}</button>
+        <Oauth />
       </form>
       <div className='flex gap-2 my-5'>
         <p>Dont have an account?</p>
