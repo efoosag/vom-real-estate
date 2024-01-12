@@ -3,9 +3,11 @@ import { app } from '../firebase'
 import { authWithGoogle } from '../httpRequest'
 import { signInSuccess } from '../redux/userSlikce'
 import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 export default function Oauth() {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const handleGoogleClick = async() => {
     try {
       const provider = new GoogleAuthProvider()
@@ -17,6 +19,7 @@ export default function Oauth() {
         photo: result.user.photoURL,
       })      
       dispatch(signInSuccess(res))
+      navigate("/profile")
     } catch (error) {
       console.log('Could not authenticate with google', error)
     }
