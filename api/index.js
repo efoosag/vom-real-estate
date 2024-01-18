@@ -5,14 +5,12 @@ import morgan from "morgan";
 import apiRouter from "./router/api.router.js";
 import cors from 'cors';
 
-
-
-
 const app = express();
 
 app.use(cors({
   origin: 'http://localhost:5173',
 }))
+
 
 app.use(morgan('combined'));
 

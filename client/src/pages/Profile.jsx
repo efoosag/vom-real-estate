@@ -1,20 +1,22 @@
 import {useRef, useState, useEffect} from 'react'
-import {useSelector} from 'react-redux'
+import {useSelector, useDispatch} from 'react-redux'
 import {Link, useNavigate} from 'react-router-dom'
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage'
 import { app } from '../firebase'
+import { httpUpdateUser } from '../httpRequest'
+import { updateUserStart, updateUserSuccess, updateUserFailure } from '../redux/userSlikce'
+
 
 export default function Profile() {
+  const dispatch = useDispatch()
   const navigate = useNavigate()
   const fileRef = useRef()
   const [file, setFile] = useState(undefined)
   const [filePerc, setFilePerc] = useState(0)
   const [fileError, setFileError] = useState(false)
+  const [updateSuccessInfo, SetUpdateSuccessInfo] = useState(false)
   const [formData, setFormData] = useState({})
-  const { currentUser } = useSelector(state => state.user)
-  const [formInput, setFormInput] = useState({})
-  const [error, setError] = useState(false)
-  const [loading, setLoading] = useState(false)
+  const { error, loading, currentUser } = useSelector(state => state.user)  
 
   useEffect(() => {
     if(file){
@@ -49,27 +51,24 @@ export default function Profile() {
     );    
   }
   const handleChange = (e) => {
-    setFormInput({
-      ...formInput,
+    setFormData({
+      ...formData,
       [e.target.id]: e.target.value
     })
-  }
+  }  
   const handleSubmit = async(e) => {
-    e.preventdefault()
-    setLoading(true)
+    e.preventDefault()    
     try {
-      const res = await httpUpdateUser(formInput)      
+      dispatch(updateUserStart())
+      console.log(currentUser._id, formData) 
+      const res = await httpUpdateUser(currentUser._id, formData)      
       if(res){                
-        setLoading(false) 
-        setError(false)        
-      } 
-      setLoading(false) 
-      setError(false) 
+        dispatch(updateUserSuccess(res))
+        SetUpdateSuccessInfo(true)      
+      }       
       navigate('/profile')     
-    } catch (error) {      
-      setLoading(false)
-      console.log(error)
-      setError(error.response.data)
+    } catch (error) {         
+      dispatch(updateUserFailure(error.message))
     }
   }
 
@@ -87,11 +86,13 @@ export default function Profile() {
             ""
           }
         </p>
-        <input type='text' placeholder='username' required className='p-3 border rounded-lg' id='username' onChange={handleChange}/>
-        <input type='email' placeholder='email' required className='p-3 border rounded-lg' id='email' onChange={handleChange}/>
-        <input type='password' placeholder='password' required className='p-3 border rounded-lg' id='password' onChange={handleChange}/>
-        <button className='bg-slate-900 text-white p-3 rounded-lg hover:opacity-80' onClick={handleSubmit}>UPDATE</button>        
+        <input type='text' placeholder={currentUser.username} className='p-3 border rounded-lg' id='username' onChange={handleChange}/>
+        <input type='email' placeholder={currentUser.email} className='p-3 border rounded-lg' id='email' onChange={handleChange}/>
+        <input type='password' placeholder='password' className='p-3 border rounded-lg' id='password' onChange={handleChange}/>
+        <button disabled={loading} className='bg-slate-900 text-white p-3 rounded-lg hover:opacity-80' onClick={handleSubmit}>{loading ? 'Loading.....' : 'UPDATE'}</button>        
       </form>
+      {error && <p className='text-red-600 mt-1'>{error}</p>}
+      {updateSuccessInfo && <p className='text-green-600 mt-1'>User have been successfully updated</p>}
       <div className='flex justify-between mt-3'>
         <span className='text-red-700 cursor-pointer'>Delete account</span>
         <span className='text-red-700 cursor-pointer'>Sign out</span>

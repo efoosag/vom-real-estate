@@ -19,14 +19,14 @@ export default function SignIn() {
   }
 
   const handleSubmit = async(e) => {
-    e.preventDefault()
-    dispatch(signInStart())    
+    e.preventDefault()        
     try {
+      dispatch(signInStart())
       const res = await httpSignIn(formInput)      
-      dispatch(signInSuccess(res))      
+      dispatch(signInSuccess(res))        
       navigate('/')     
-    } catch (error) {   
-      dispatch(signInSuccess(error.response.data))      
+    } catch (error) {  
+      dispatch(signInFailure(error.message))      
     }    
   }
   return (

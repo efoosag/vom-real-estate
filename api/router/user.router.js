@@ -6,6 +6,6 @@ import { httpUpdateUser } from '../controller/user.controller.js';
 const usersRouter = express.Router();
 
 usersRouter.get('/test', test)
-usersRouter.put('/:id', verifyTokenAndAuthorization, httpUpdateUser)
+usersRouter.post('/:id', verifyTokenAndAuthorization, httpUpdateUser)
 
 export default usersRouter;
