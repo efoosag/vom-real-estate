@@ -43,3 +43,8 @@ export const httpDeleteUser = async (id) => {
   Cookies.remove('accesstoken')       
   return res  
 }
+
+export const httpSignOutUser = async () => {
+  Cookies.remove('accesstoken')
+  return "You have been successfully logged out"
+}
