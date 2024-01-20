@@ -1,14 +1,11 @@
 import jwt from "jsonwebtoken";
 
 export const verifyToken = (req,res, next) => {
-  const authHeader = req.headers.token 
-  console.log(authHeader)  
+  const authHeader = req.headers.token    
   if(authHeader) {
-    const token = authHeader.split(" ")[1]
-    console.log(token)
+    const token = authHeader.split(" ")[1]    
     jwt.verify(token, process.env.JWT_SEC_KEY, (err, user) =>{      
       if(err) {
-        console.log(err)
         return res.status(403).json('Unable to authenticate credentials')        
       }      
       req.user = user
@@ -20,8 +17,7 @@ export const verifyToken = (req,res, next) => {
 }
 
 export const verifyTokenAndAuthorization = (req, res, next) => {
-  verifyToken(req, res, () => {
-    console.log(req.user.id, req.params.id)
+  verifyToken(req, res, () => {    
     if(req.user.id === req.params.id){
       next()
     } else {      

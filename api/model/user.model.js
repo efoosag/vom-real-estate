@@ -17,3 +17,11 @@ export async function updateUser(id, user) {
   return {...others}
 }
 
+export async function deleteUser(id) {
+  const deleteUser = await User.findByIdAndDelete(id)
+  if (!deleteUser){
+    return "User not found"
+  }
+  return deleteUser
+}
+

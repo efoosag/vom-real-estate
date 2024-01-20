@@ -3,17 +3,8 @@ import Cookies from 'js-cookie';
 
 const BASE_URL = "http://localhost:3000/api/v1/"
 
-
-const TOKEN = Cookies.get('accesstoken');
-
 export const publicRequest = axios.create({
   baseURL: BASE_URL,
-})
-
-export const userRequest = axios.create({
-  baseURL: BASE_URL,
-  headers: {'Content-Type': 'application/json',
-              token: `Bearer ${TOKEN}`}
 })
 
 export const authWithGoogle = async (user) => {
@@ -35,8 +26,20 @@ export const httpSignIn = async (user) => {
   return res.data   
 }
 
-export const httpUpdateUser = async (id, user) => {  
-  const res = await userRequest.post(`/users/${id}`, user) 
+export const httpUpdateUser = async (id, user) => { 
+  const TOKEN = Cookies.get('accesstoken'); 
+  const res = await publicRequest.post(`/users/${id}`,
+            {headers: {'Content-Type': 'application/json',
+               token: `Bearer ${TOKEN}`}}, user) 
   console.log(res.data)    
   return res.data   
+}
+
+export const httpDeleteUser = async (id) => {  
+  const TOKEN = Cookies.get('accesstoken');  
+  const res = await publicRequest.delete(`/users/${id}`,
+            {headers: {'Content-Type': 'application/json',
+              token: `Bearer ${TOKEN}`}})
+  Cookies.remove('accesstoken')       
+  return res  
 }

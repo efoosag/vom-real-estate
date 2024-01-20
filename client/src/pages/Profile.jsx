@@ -3,8 +3,13 @@ import {useSelector, useDispatch} from 'react-redux'
 import {Link, useNavigate} from 'react-router-dom'
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage'
 import { app } from '../firebase'
-import { httpUpdateUser } from '../httpRequest'
-import { updateUserStart, updateUserSuccess, updateUserFailure } from '../redux/userSlikce'
+import { httpUpdateUser, httpDeleteUser } from '../httpRequest'
+import { updateUserStart, 
+         updateUserSuccess, 
+         updateUserFailure,
+         deleteUserStart,
+         deleteUserSuccess,
+         deleteUserFailure, } from '../redux/userSlikce'
 
 
 export default function Profile() {
@@ -59,8 +64,7 @@ export default function Profile() {
   const handleSubmit = async(e) => {
     e.preventDefault()    
     try {
-      dispatch(updateUserStart())
-      console.log(currentUser._id, formData) 
+      dispatch(updateUserStart())      
       const res = await httpUpdateUser(currentUser._id, formData)      
       if(res){                
         dispatch(updateUserSuccess(res))
@@ -69,6 +73,21 @@ export default function Profile() {
       navigate('/profile')     
     } catch (error) {         
       dispatch(updateUserFailure(error.message))
+    }
+  }
+
+  const handleDelete = async() => {
+    try {
+      dispatch(deleteUserStart())
+      const res = await httpDeleteUser(currentUser._id)      
+      if(!res.success == 'OK'){
+        dispatch(deleteUserFailure(res.data))
+        return;
+      } 
+      dispatch(deleteUserSuccess())  
+      
+    } catch (error) {
+      dispatch(deleteUserFailure())
     }
   }
 
@@ -94,7 +113,7 @@ export default function Profile() {
       {error && <p className='text-red-600 mt-1'>{error}</p>}
       {updateSuccessInfo && <p className='text-green-600 mt-1'>User have been successfully updated</p>}
       <div className='flex justify-between mt-3'>
-        <span className='text-red-700 cursor-pointer'>Delete account</span>
+        <span onClick={handleDelete} className='text-red-700 cursor-pointer'>Delete account</span>
         <span className='text-red-700 cursor-pointer'>Sign out</span>
       </div>
     </div>
