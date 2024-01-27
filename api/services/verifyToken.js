@@ -21,7 +21,7 @@ export const verifyTokenAndAuthorization = (req, res, next) => {
     if(req.user.id === req.params.id){
       next()
     } else {      
-      res.status(403).json('You1 are not Authorized to perform task on this account')
+      res.status(403).json('You are not Authorized to perform task on this account')
     }
   })
 }
