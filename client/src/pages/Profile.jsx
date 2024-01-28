@@ -126,7 +126,8 @@ export default function Profile() {
         <input type='text' placeholder={currentUser.username} className='p-3 border rounded-lg' id='username' onChange={handleChange}/>
         <input type='email' placeholder={currentUser.email} className='p-3 border rounded-lg' id='email' onChange={handleChange}/>
         <input type='password' placeholder='password' className='p-3 border rounded-lg' id='password' onChange={handleChange}/>
-        <button disabled={loading} className='bg-slate-900 text-white p-3 rounded-lg hover:opacity-80' onClick={handleSubmit}>{loading ? 'Loading.....' : 'UPDATE'}</button>        
+        <button disabled={loading} className='bg-slate-900 text-white p-3 rounded-lg hover:opacity-80' onClick={handleSubmit}>{loading ? 'Loading.....' : 'UPDATE'}</button>
+        <Link to='/create-listing' className='bg-green-900 text-center uppercase text-white p-3 rounded-lg hover:opacity-80'>create listing</Link>        
       </form>
       {error && <p className='text-red-600 mt-1'>{error}</p>}
       {updateSuccessInfo && <p className='text-green-600 mt-1'>User have been successfully updated</p>}

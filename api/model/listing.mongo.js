@@ -17,7 +17,15 @@ const listingSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  discountedPrice: {
+    type: Number,
+    required: true,
+  },
   bedrooms: {
+    type: Number,
+    required: true,
+  },
+  bathrooms: {
     type: Number,
     required: true,
   },
@@ -25,6 +33,10 @@ const listingSchema = new mongoose.Schema({
     type: String,
     default: 'rent',
     required: true,
+  },
+  offer: {
+    type: Boolean,
+    default: false,    
   },
   imageUrls: {
     type: Array,
